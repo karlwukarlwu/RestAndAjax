@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Axios</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <button id="btn1">按钮1</button>
+        <button id="btn2">按钮2</button>
+
+        <script>
+            axios.defaults.baseURL = "http://localhost:3000"
+            //这个不一定跑的通 这个只是文档的演示案例 这下面的请求逻辑是错的
+            // 只是告诉你可以这么设置默认的请求头
+            axios.defaults.headers.common[
+                "Authorization"
+            ] = `Bearer ${localStorage.getItem("token")}`
+
+            document.getElementById("btn1").onclick = () => {
+                axios({
+                    url: "students",
+                    method: "post",
+                    data: {
+                        name: "唐僧",
+                        age: 18,
+                        gender: "男",
+                        address: "女儿国"
+                    },
+
+                    timeout: 1000
+                })
+                    .then((result) => {
+                        // result是axios封装过
+                        console.log(result.data)
+                    })
+                    .catch((err) => {
+                        console.log("出错了！", err)
+                    })
+            }
+        </script>
+    </body>
+</html>

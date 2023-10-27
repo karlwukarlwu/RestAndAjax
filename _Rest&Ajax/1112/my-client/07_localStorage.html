@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本地存储</title>
+</head>
+<body>
+    <h1>本地存储的演示</h1>
+    <button id="btn01">存</button>
+    <button id="btn02">取</button>
+    <hr>
+    <script>
+        btn01.onclick = () => {
+            //开发者下面的应用 本地存储空间 会话存储空间 这里面查看这两个空间的内容
+
+            // console.log(sessionStorage)
+
+            // setItem() 用来存储数据
+            // getItem() 用来获取数据
+            // removeItem() 删除数据
+            // clear() 清空数据
+            // sessionStorage.setItem("name", "孙悟空")
+            // sessionStorage.setItem("age", "18")
+            // sessionStorage.setItem("gender", "男")
+            // sessionStorage.setItem("address", "花果山")
+            // 一般都用这个
+            localStorage.setItem("name", "孙悟空")
+            localStorage.setItem("age", "18")
+            localStorage.setItem("gender", "男")
+            localStorage.setItem("address", "花果山")
+        }
+
+        btn02.onclick = () => {
+
+            //取数据
+            // const name = sessionStorage.getItem("name")
+
+            // console.log(name)
+
+            //移除数据
+            // sessionStorage.removeItem("name")
+
+            sessionStorage.clear()
+
+        }
+
+    </script>
+
+    
+</body>
+</html>

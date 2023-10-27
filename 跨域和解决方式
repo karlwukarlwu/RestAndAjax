@@ -1,0 +1,49 @@
+// 解析json格式请求体的中间件
+app.use(express.json())
+
+app.use((req, res, next) => {
+    // 设置响应头
+    //这个的意思是谁都可以访问
+    res.setHeader("Access-Control-Allow-Origin", "*")
+    // Access-Control-Allow-Origin 设置指定值时只能设置一个
+    // 这个是只允许特定的端口 记得改后面的端口号
+    // res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
+
+    // Access-Control-Allow-Methods 允许的请求的方式
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH")
+    // Access-Control-Allow-Headers 允许传递的请求头
+    res.setHeader("Access-Control-Allow-Headers", "Content-type")
+
+
+    next()
+})
+
+// 统一的api
+// 定义学生信息的路由
+app.get("/students", (req, res) => {
+
+在前面的部分加上一个use中间件
+
+什么是跨域
+
+      - CORS (跨域资源共享)
+                            - 跨域请求
+                                - 如果两个网站的完整的域名不相同
+                                    a网站：http://haha.com
+                                    b网站：http://heihei.com
+                                - 跨域需要检查三个东西：
+                                    协议 域名 端口号
+                                    http://localhost:5000
+                                    http://127.0.0.1:5000
+                                    - 三个只要有一个不同，就算跨域
+                                        前后端分离 算跨域
+                                  正常跨域可以 ajax会出问题
+                                - 当我们通过AJAX去发送跨域请求时，
+                                    不是服务器的问题，而是浏览器的问题
+                                    浏览器为了服务器的安全，会阻止JS读取到服务器的数据
+
+                            - 解决方案
+                                - 在服务器中设置一个允许跨域的头
+                                    Access-Control-Allow-Origin
+                                        - 允许那些客户端访问我们的服务器
+                                    https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS

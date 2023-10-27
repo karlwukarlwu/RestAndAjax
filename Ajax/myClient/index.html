@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>这是客户端</h1>
+<button id = btn> 点击加载数据</button>
+<script>
+    const btn = document.getElementById("btn")
+    btn.onclick=()=>{
+        const xhr = new XMLHttpRequest()
+        xhr.open("GET","http://loaclhost:3000/students")
+        xhr.send()
+    }
+
+</script>
+
+</body>
+</html>

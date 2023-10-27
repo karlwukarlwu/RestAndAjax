@@ -1,0 +1,117 @@
++------------------+          +-------------------+          +------------------+
+|                  |          |                   |          |                  |
+|  User's Browser  |          |   Evil Website    |          |  Legitimate      |
+|                  |          | (forum.com)       |          |  Website         |
+|                  |          |                   |          | (mybank.com)     |
++------------------+          +-------------------+          +------------------+
+        |                            |                           |
+        |                            |                           |
+        | 1. User visits              |                           |
+        |    forum.com and            |                           |
+        |    mybank.com               |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        | 2. User logs in             |                           |
+        |    to mybank.com            |                           |
+        |    (Session cookie          |                           |
+        |     is set)                 |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            | 3. Evil script tries      |
+        |                            |    to make a request to   |
+        |                            |    mybank.com with        |
+        |                            |    user's cookies         |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            | 4. mybank.com processes   |
+        |                            |    request but doesn't    |
+        |                            |    include proper         |
+        |                            |    CORS headers in        |
+        |                            |    response               |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        | 5. Browser checks           |                           |
+        |    response for             |                           |
+        |    proper CORS headers      |                           |
+        |    and doesn’t find them,   |                           |
+        |    so it blocks the         |                           |
+        |    response                 |                           |
+        |                            |                           |
+        |                            |                           |
+        |                            |                           |
+        +----------------------------+                           |
+        |                            |                           |
+        | 6. User is protected;       |                           |
+        |    attacker can't access    |                           |
+        |    response data            |                           |
+        |                            |                           |
+        +----------------------------+---------------------------+
+当然可以。让我们以一个常见的例子来说明跨域请求是如何被浏览器拦截的。
+
+### 场景描述
+
+假设你在浏览器中打开了两个标签页：
+
+1. 第一个标签页上运行的是你的银行网站，网址为 `https://www.mybank.com`。
+2. 第二个标签页上运行的是一个第三方论坛，网址为 `https://www.forum.com`。
+
+你在银行网站上已经登录，并且该网站的会话cookie已经存储在你的浏览器中。
+
+现在，论坛页面上有一个恶意脚本，它试图通过AJAX发起一个请求，从你的银行账户中转移资金到攻击者指定的账户。
+
+```javascript
+// 运行在 https://www.forum.com 的恶意脚本
+fetch('https://www.mybank.com/transfer?amount=1000&to=attacker-account', {
+  method: 'GET',
+  credentials: 'include'
+});
+```
+
+### 浏览器的拦截机制
+
+1. **发送请求**: 当上述脚本执行时，浏览器会发现这是一个跨域请求（因为请求的是另一个域名）。
+2. **检查响应**: 浏览器会检查从 `https://www.mybank.com` 返回的响应头，查看是否有合适的CORS头（如 `Access-Control-Allow-Origin`）允许 `https://www.forum.com` 发起这样的请求。
+3. **拦截响应**: 如果银行网站的服务器没有返回允许 `https://www.forum.com` 的CORS头，浏览器将拦截这个响应，并且不会将响应的数据暴露给恶意脚本。此外，浏览器还会在控制台中显示一个跨域错误消息。
+
+通过这种机制，即使恶意脚本能够发起请求并且服务器处理了这个请求，攻击者也无法读取响应的数据，用户的银行信息也就得到了保护。这就是浏览器的跨域策略如何工作来保护用户免受跨站请求伪造（CSRF）和其他类型跨站攻击的一个例子。
+
+（用户的钱该被转还是被转，只是返回的信息被浏览器拦截不暴露）

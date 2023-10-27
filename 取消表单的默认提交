@@ -1,0 +1,75 @@
+取消或阻止表单的默认提交行为是在使用JavaScript进行Web开发时的一种常见需求。这通常是为了使用AJAX技术异步提交表单数据，而不是进行全页面的刷新。下面是一些常见的方法来取消表单的默认提交行为：
+
+### 1. 使用 JavaScript 的 `event.preventDefault()` 方法
+
+这是最常见和推荐的方法。
+
+```html
+<form id="myForm">
+  <!-- 表单元素 -->
+  <button type="submit">提交</button>
+</form>
+
+<script>
+  document.getElementById('myForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // 这里可以加入其他代码来处理表单数据
+  });
+</script>
+```
+
+在这个例子中，当表单提交时，JavaScript会阻止默认的提交行为，并允许你在阻止之后运行你自己的代码。
+
+### 2. 使用 `return false`
+
+你可以在表单的 `onsubmit` 属性中直接使用 `return false`。
+
+```html
+<form onsubmit="return handleSubmit()">
+  <!-- 表单元素 -->
+  <button type="submit">提交</button>
+</form>
+
+<script>
+  function handleSubmit() {
+    // 处理表单数据
+    return false; // 阻止表单提交
+  }
+</script>
+```
+
+### 3. 使用 `button` 的 `type="button"`
+
+如果你使用的是 `<button>` 元素作为提交按钮，你可以将 `type` 属性设置为 `"button"`。这将阻止按钮提交表单。
+
+```html
+<form>
+  <!-- 表单元素 -->
+  <button type="button" onclick="handleSubmit()">提交</button>
+</form>
+
+<script>
+  function handleSubmit() {
+    // 处理表单数据
+  }
+</script>
+```
+
+### 4. 使用 `<input type="button">` 或 `<button type="button">` 配合 JavaScript
+
+```html
+<form>
+  <!-- 表单元素 -->
+  <input type="button" value="提交" onclick="handleSubmit()">
+</form>
+
+<script>
+  function handleSubmit() {
+    // 处理表单数据
+  }
+</script>
+```
+
+在这种方法中，由于按钮的类型是 "button"，它不会触发表单提交。你需要手动处理表单数据。
+
+这些方法都可以阻止表单的默认提交行为，选择哪一种取决于你的具体需求和你喜欢的编程风格。推荐使用第一种方法，因为它更灵活，可以更好地与现代的JavaScript库和框架集成。
